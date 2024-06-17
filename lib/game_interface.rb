@@ -1,6 +1,8 @@
 require 'colorize'
+require_relative 'player'
 
-class Game
+
+class Game < Player
 attr_reader :hangman, :dash, :word
 def initialize()
     @dash = []
@@ -30,7 +32,7 @@ def random_word()
 end
 
 def blank_dash()
-    @word = "programming"
+    @word = random_word()
     dash_length = @word.length 
 
     while dash_length > 0
@@ -61,17 +63,9 @@ def startGame()
     blank_dash()
     word =  @word
     puts @dash
-    until @strike > 7
-
-        if @strike > 6
-            puts "you have been hanged".colorize(:red)
-            break
-        elsif @dash.include?('_') == false
-                puts "Congrats! you Guessed the right word".colorize(:green)
-                break
-        end
+    until @strike > 6
             
-        letter = gets.chomp
+        letter = player_make_guess
         arr = word.split('').join(' ').split('')
 
         if arr.include?(letter)
@@ -85,6 +79,13 @@ def startGame()
             strike_on_wrong_guess()
         end
     
+        if @strike > 6
+            puts "you have been hanged".colorize(:red)
+            break
+        elsif @dash.include?('_') == false
+                puts "Congrats! you Guessed the right word".colorize(:green)
+                break
+        end
         display_gameInterface()
         puts @dash
 
@@ -93,20 +94,3 @@ def startGame()
 end
 
 end
-
-hangman = Game.new
-hangman.startGame
-#  hangman.blank_dash
-# puts hangman.word
-#  hangman.dash[0] = "R"
-#  hangman.dash[4] = "U"
-# puts hangman.dash
-
-
-# hangman.hangman[2] = "\u25EF"
-# hangman.hangman[7] = "\u2502"
-# hangman.hangman[5] = "\u2571"
-# hangman.hangman[6] = "\u2572"
-# hangman.hangman[8] = "\u2571"
-# hangman.hangman[9] = "\u2572"
-# hangman.display_gameInterface
