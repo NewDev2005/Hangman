@@ -27,7 +27,7 @@ end
 
 def random_word()
     word = File.readlines('google-10000-english-no-swears.txt')
-    random_num = rand(0..9000)
+    random_num = rand(0..9893)
     return word[random_num]
 end
 
@@ -35,7 +35,7 @@ def blank_dash()
     @word = random_word()
     dash_length = @word.length 
 
-    while dash_length > 0
+    while dash_length > 1
         @dash.push("_")
         dash_length -= 1
         end
@@ -63,7 +63,7 @@ def startGame()
     blank_dash()
     word =  @word
     puts @dash
-    until @strike > 6
+    until @strike > 5
             
         letter = player_make_guess
         arr = word.split('').join(' ').split('')
@@ -79,8 +79,9 @@ def startGame()
             strike_on_wrong_guess()
         end
     
-        if @strike > 6
+        if @strike > 5
             puts "you have been hanged".colorize(:red)
+            display_gameInterface()
             break
         elsif @dash.include?('_') == false
                 puts "Congrats! you Guessed the right word".colorize(:green)
@@ -90,7 +91,7 @@ def startGame()
         puts @dash
 
     end
-    puts "This correct word is #{@word}"
+    puts "The correct word is #{@word}"
 end
 
 end
