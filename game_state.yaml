@@ -1,0 +1,16 @@
+--- !ruby/object:Game
+dash: _ _ _ _ _ _ c _ _ o _ _ _
+strike: 5
+word: 'instructional
+
+  '
+hangman:
+- "│"
+- "─"
+- "◯"
+- "┌"
+- "┐"
+- "╱"
+- "╲"
+- "│"
+- "╱"
