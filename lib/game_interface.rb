@@ -1,4 +1,5 @@
 require 'colorize'
+require 'yaml'
 require_relative 'player'
 
 
@@ -23,6 +24,7 @@ for i in (0..3)
     puts "#{@hangman[0]}"
 end
 puts "\n"
+puts "Do you want to save the game?"
 end
 
 def random_word()
@@ -65,7 +67,13 @@ def startGame()
     puts @dash
     until @strike > 5
             
-        letter = player_make_guess
+        letter = player_make_guess 
+        if letter == "save"
+            save_game()
+            break
+        elsif letter == "99"
+            reload
+        end
         arr = word.split('').join(' ').split('')
 
         if arr.include?(letter)
@@ -84,7 +92,7 @@ def startGame()
             display_gameInterface()
             break
         elsif @dash.include?('_') == false
-                puts "Congrats! you Guessed the right word".colorize(:green)
+                puts "Congrats! you Guessed the right word".colorize(:green) 
                 break
         end
         display_gameInterface()
@@ -94,4 +102,18 @@ def startGame()
     puts "The correct word is #{@word}"
 end
 
+def save_game
+    serialized_object = YAML.dump(self)
+    file = File.open('game_state.yaml','w')
+    file.write(serialized_object)
 end
+
+def reload()
+    game_state = YAML.load_file(
+        'game_state.yaml',
+        permitted_classes: [self,Game,Symbol]
+    )
+end
+
+end
+
