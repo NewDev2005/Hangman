@@ -4,7 +4,7 @@ require_relative 'player'
 
 
 class Game < Player
-attr_reader :hangman, :dash, :word
+attr_accessor :hangman, :dash, :word, :strike
 def initialize()
     @dash = []
     @strike = 0
@@ -24,7 +24,7 @@ for i in (0..3)
     puts "#{@hangman[0]}"
 end
 puts "\n"
-puts "Do you want to save the game?"
+puts "Enter 0 to Save and Exit the Game".colorize(:yellow)
 end
 
 def random_word()
@@ -33,7 +33,7 @@ def random_word()
     return word[random_num]
 end
 
-def blank_dash()
+def create_blank_dash()
     @word = random_word()
     dash_length = @word.length 
 
@@ -62,17 +62,16 @@ def strike_on_wrong_guess
 end
 
 def startGame()
-    blank_dash()
+    # blank_dash()
     word =  @word
     puts @dash
     until @strike > 5
             
         letter = player_make_guess 
-        if letter == "save"
+        if letter == "0"
             save_game()
+            puts "Your Game has been saved successfully!".colorize(:green)
             break
-        elsif letter == "99"
-            reload
         end
         arr = word.split('').join(' ').split('')
 
@@ -88,18 +87,22 @@ def startGame()
         end
     
         if @strike > 5
-            puts "you have been hanged".colorize(:red)
+            puts "you have been hanged :p".colorize(:red)
             display_gameInterface()
+            puts "The correct word is #{@word}"
             break
         elsif @dash.include?('_') == false
+            display_gameInterface()
+            puts @dash
                 puts "Congrats! you Guessed the right word".colorize(:green) 
+                puts "The correct word is #{@word}"
                 break
         end
         display_gameInterface()
         puts @dash
 
     end
-    puts "The correct word is #{@word}"
+    
 end
 
 def save_game
@@ -109,11 +112,15 @@ def save_game
 end
 
 def reload()
-    game_state = YAML.load_file(
+   game_state =  YAML.load_file(
         'game_state.yaml',
         permitted_classes: [self,Game,Symbol]
     )
+    game_state.startGame
 end
 
 end
 
+# c = Game.new
+# c.reload
+# p c.dash
